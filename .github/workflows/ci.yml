@@ -1,0 +1,48 @@
+# Runs the PEP 8 check and every automated test on each push and pull
+# request to main. A green tick on GitHub means both passed.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Lint and test
+    runs-on: ubuntu-latest
+
+    # Throwaway values for this run only. They are not real secrets: the
+    # real SECRET_KEY lives only in Heroku config vars.
+    env:
+      SECRET_KEY: ci-only-not-a-real-secret
+      DEBUG: "True"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt flake8 coverage
+
+      - name: PEP 8 check (flake8)
+        run: flake8 --exclude=.venv,staticfiles,migrations .
+
+      - name: Check for missing migrations
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Run tests with coverage
+        run: |
+          coverage run --source=accounts,equipment,config manage.py test
+          coverage report

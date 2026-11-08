@@ -1,0 +1,12 @@
+{
+    // Let VS Code manage this project's virtual environment and install Python packages with pip.
+    "python-envs.pythonProjects": [
+        {
+            "path": ".",
+            // Use the Python extension's venv manager for this project.
+            "envManager": "ms-python.python:venv",
+            // Install dependencies from the project's requirements.txt with pip.
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
+}
