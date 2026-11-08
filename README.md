@@ -6,7 +6,7 @@ Trackroom is a full-stack Django web app that tracks a company's IT equipment th
 
 It was built for the Code Institute Full Stack bootcamp capstone, to show full CRUD (Create, Read, Update, Delete) behind a real login system with two user roles.
 
-**Live site: [add the Heroku link here after deploying](https://YOUR-APP-NAME.herokuapp.com/)**
+**Live site: [https://internal-tracker-agustus-7f7416195a35.herokuapp.com/](https://internal-tracker-agustus-7f7416195a35.herokuapp.com/)**
 
 ![Trackroom manager dashboard](docs/images/12-manager-dashboard.png)
 
@@ -49,7 +49,7 @@ There are 19 user stories, prioritised with MoSCoW: 12 Must, 4 Should, 3 Could, 
 
 ### Wireframes
 
-Low-fidelity wireframes were drawn in Balsamiq before building. The finished pages follow them closely; the screenshots under [Features](#features) show the result.
+Low-fidelity wireframes were drawn in before building. The finished pages follow them closely; the screenshots under [Features](#features) show the result.
 
 | Employee: catalogue (desktop) | Manager: review a request (desktop) |
 |---|---|
