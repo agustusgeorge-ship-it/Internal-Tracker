@@ -1,0 +1,20 @@
+# Secrets: local settings and environment files never go to GitHub.
+config/env.py
+.env
+.env.*
+
+# Local databases and generated files.
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+htmlcov/
+.coverage
+
+# Python and editor clutter.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
