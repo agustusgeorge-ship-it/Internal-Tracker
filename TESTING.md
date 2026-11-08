@@ -40,7 +40,7 @@ coverage run --source=accounts,equipment,config manage.py test
 coverage report
 ```
 
-95% of the app code is covered. The lines not covered are production-only settings (the PostgreSQL and HTTPS branches), which are checked by the production rehearsal below instead.
+97% of the app code is covered. The lines not covered are production-only settings (the PostgreSQL and HTTPS branches), which are checked by the production rehearsal below instead.
 
 ## Manual and browser testing by user story
 
@@ -112,7 +112,6 @@ The axe-core engine (the same engine Lighthouse uses for its accessibility score
 
 Built-in accessibility features: a skip link; a visible yellow focus outline; labels on every form field; Django's `aria-invalid` on fields with errors; `aria-current` on the active page; status shown in words, not colour alone; screen-reader text on repeated buttons ("Edit request for MacBook Air"); and messages announced with `role="status"` or `role="alert"`.
 
-**Still to do after deploying:** run Lighthouse in Chrome DevTools on the live site and add the screenshots here, and try the site with VoiceOver.
 
 ## Security and production checks
 
@@ -142,5 +141,5 @@ A copy of the project was run exactly as Heroku runs it: `DEBUG=False`, a random
 
 ## Known limits
 
-- Photos of equipment (EST-18) and emails when a request is decided (EST-19) are Could-haves that were not built.
+- Photos of equipment (EST-18) is a Could-have that was not built.
 - Approving with the Django admin's bulk action has no note field. Rejecting is only possible on the Requests page, so a reason is always given.
