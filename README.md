@@ -229,7 +229,7 @@ The project was planned and tracked on a public GitHub Projects board: **[add th
 
 The full testing write-up is in **[TESTING.md](TESTING.md)**. In summary:
 
-- **80 automated Django tests**, all passing, covering **95%** of the code. They include two-user tests proving one employee cannot see, edit or cancel another's request, and that employees get a 403 on every manager page.
+- **80 automated Django tests**, all passing, covering **97%** of the code. They include two-user tests proving one employee cannot see, edit or cancel another's request, and that employees get a 403 on every manager page.
 - **flake8** (PEP 8): no problems.
 - **W3C HTML validator:** 23 pages, 0 errors, 0 warnings.
 - **W3C CSS validator:** 0 errors.
@@ -280,24 +280,25 @@ The full testing write-up is in **[TESTING.md](TESTING.md)**. In summary:
 
 ### Deploy to Heroku
 
-1. In Heroku, create a new app (Europe region).
-2. Under **Resources**, add the **Heroku Postgres** add-on (Essential-0). This sets `DATABASE_URL` for you.
-3. Under **Settings > Config Vars**, add:
+The live site runs on Heroku with a Heroku Postgres database. This is how it was deployed, using the Heroku CLI:
+
+1. Log in: `heroku login`
+2. Create the app in the Europe region: `heroku create internal-tracker-agustus --region eu`
+3. Add the database (this sets `DATABASE_URL` automatically): `heroku addons:create heroku-postgresql:essential-0`
+4. Set the config vars with `heroku config:set`. The values are never stored in the repository:
 
    | Key | Value |
    |---|---|
-   | `SECRET_KEY` | a new long random string (never the one on your computer) |
+   | `SECRET_KEY` | a newly generated random string |
    | `DEBUG` | `False` |
-   | `ALLOWED_HOSTS` | `your-app-name.herokuapp.com` |
-   | `CSRF_TRUSTED_ORIGINS` | `https://your-app-name.herokuapp.com` |
+   | `ALLOWED_HOSTS` | the app's exact hostname, without `https://` |
+   | `CSRF_TRUSTED_ORIGINS` | `https://` plus the app's exact hostname |
 
-4. Under **Deploy**, connect the GitHub repository and deploy the `main` branch. Tick "Wait for CI to pass before deploy" for automatic deploys. Heroku installs `requirements.txt`, runs `collectstatic`, and the `Procfile` runs `migrate` on every release before starting gunicorn.
-5. Open the console (**More > Run console**) and run:
-   ```bash
-   python manage.py seed_equipment
-   python manage.py createsuperuser
-   ```
-6. Open the app and log in as the superuser to manage stock and approve requests.
+5. Deploy: `git push heroku main`. Heroku installs `requirements.txt`, runs `collectstatic`, then the `Procfile` release step runs `migrate` before gunicorn starts.
+6. Load the demo equipment and create a manager: `heroku run python manage.py seed_equipment`, then `heroku run python manage.py createsuperuser`.
+7. Open the site with `heroku open`.
+
+A problem met during deployment: the first page load returned a 400 error because `ALLOWED_HOSTS` did not match the app's full hostname, which includes a random suffix. Setting the exact hostname fixed it.
 
 ### Forking or cloning
 

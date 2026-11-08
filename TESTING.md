@@ -7,7 +7,7 @@ Back to the [README](README.md).
 | Check | Tool | Result |
 |---|---|---|
 | Automated tests | Django `TestCase` (`python manage.py test`) | **80 tests, all pass** (about 7 seconds) |
-| Code coverage | coverage.py | **95%** of app code (migrations and tests excluded) |
+| Code coverage | coverage.py | **97%** of app code (migrations and tests excluded) |
 | PEP 8 | flake8 | **0 problems** |
 | Missing migrations | `makemigrations --check` | **None** |
 | Continuous integration | GitHub Actions (`.github/workflows/ci.yml`) | flake8, migrations check and all tests on every push to `main` |
