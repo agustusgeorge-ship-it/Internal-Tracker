@@ -3,9 +3,6 @@
 **Version:** 2026-11-06
 **What the app does:** an IT equipment tracker for a company. Managers keep a stock list of laptops and other kit and record its condition. New starters sign up and request the equipment they need. A manager approves or rejects each request. When someone leaves, their equipment is handed back and checked in.
 
-Each story below is written to paste straight into a GitHub issue using the repo's **User Story Template** (Project goal / User story / Acceptance criteria / Implementation notes). Add the label `user-story` and a priority label (`must-have`, `should-have`, `could-have`), then put the issues on the GitHub Project board.
-
-The learning-outcome labels (LO1, LO2...) follow the ones already used in `docs/user-stories.md`. Check them against your assessment brief before submitting.
 
 ---
 
@@ -324,13 +321,6 @@ The learning-outcome labels (LO1, LO2...) follow the ones already used in `docs/
 
 ---
 
-### EST-19: Email when a request is decided (Could)
-
-**User story:** As an **employee**, I **get an email when my request is approved or rejected** so that **I don't have to keep checking the site**.
-
-**Status:** Not built in this version. Plan: Django `send_mail`, with email credentials in environment variables only.
-
----
 
 ## 5. Data model (for the README's database section)
 
@@ -378,6 +368,6 @@ In stock --(employee requests)--> Reserved --(manager approves)--> Assigned
 | 5 | EST-11: approve and reject | Done |
 | 6 | EST-12: handbacks | Done |
 | 7 | EST-13 to EST-17: dashboards, my equipment, messages, responsive, search | Done |
-| 8 | EST-18, EST-19: photos, email | Not built (Could) |
+| 8 | EST-18: photos | Not built (Could) |
 
 Every Must story has automated tests: see [TESTING.md](../TESTING.md).
