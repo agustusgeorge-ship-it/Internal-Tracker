@@ -15,7 +15,7 @@ It was built for the Code Institute Full Stack bootcamp capstone, to show full C
 | Manager | `demo_manager` | `demo_man` |
 | Employee | `demo_employee` | `demo_emp` |
 
-These accounts exist only on the demo site and hold no real data.
+These accounts exist only on the demo site and hold no real data. Django admin (`/admin/`) login details are supplied separately in the project submission form.
 
 ![Trackroom manager dashboard](docs/images/12-manager-dashboard.png)
 
@@ -58,7 +58,7 @@ There are 19 user stories, prioritised with MoSCoW: 12 Must, 4 Should, 3 Could, 
 
 ### Wireframes
 
-Low-fidelity wireframes were drawn in before building. The finished pages follow them closely; the screenshots under [Features](#features) show the result.
+Wireframes of the main screens are shown below. The finished pages follow these layouts closely; the screenshots under [Features](#features) show the result.
 
 | Employee: catalogue (desktop) | Manager: review a request (desktop) |
 |---|---|
@@ -339,10 +339,10 @@ AI tools were used throughout this project as a collaborator, not as a replaceme
 | 2026-11 | Planning | The rough user stories ("equipment tracker for joiners and leavers, CRUD, manager approves") were rewritten with Claude into 19 MoSCoW stories with acceptance criteria. Claude also suggested the three-model database and the item life cycle (in stock, reserved, assigned, in repair, retired). |
 | 2026-11-06 | Planning | Claude reviewed the repository and found that `main` had been reset to the first commit, with the working app only on a local backup branch, and that `main` had no `.gitignore` while `config/env.py` (with the secret key) sat in the folder. The backup was used as the starting point, and a new `.gitignore` was written first. |
 | 2026-11-06 | Developing features | Claude Code rebuilt the app around the new stories: split it into `accounts` and `equipment` apps; wrote the models, forms, views, templates and CSS; kept the original Trackroom sidebar design; and upgraded Django 4.2 to 5.2 LTS, because 4.2's security support ended in April 2026. Photo uploads (Cloudinary) were dropped in favour of type icons, which removed an external account and three packages. |
-| 2026-11-06 | Automated tests | Claude Code wrote 80 tests from the acceptance criteria. The first run failed 55 of 78 because the new login message crashed when the test client logged in without the message system. It was fixed with `fail_silently`. A faster test-only password hasher cut the run from 4 minutes to 7 seconds. |
-| 2026-11-06 | Debugging | A Playwright run in Chrome found a bug the unit tests missed: on the "Change your request" page, the start date box was empty. The UK date format (11/11/2026) does not fit a browser date picker, which needs 2026-11-11, so saving failed. The widget was fixed to always send YYYY-MM-DD, and a test was added that checks the date appears. |
-| 2026-11-06 | Debugging | Django's deployment check (`check --deploy`) with `DEBUG=False` found that a new `/favicon.ico` redirect crashed the site at start-up in production, because it looked up a hashed static file name before `collectstatic` had run. It was changed to look the name up only when requested, then a full production rehearsal (collectstatic, gunicorn, HTTPS redirect, security headers, 404 page) was run. |
-| 2026-11-06 | Code quality | The browser screenshots showed docks and routers listed before laptops (types were sorted alphabetically), so the catalogue and stock list now list laptops first, with a test. flake8 found 13 long lines, which were fixed. |
-| 2026-11-06 | Testing | Every page was sent to the W3C HTML validator (23 pages, 0 errors), the CSS to the W3C CSS validator (0 errors; two old-style rules were also tidied), and every page was audited with axe for WCAG 2.1 AA (0 violations, including phone widths). |
+| 2026-11-07 | Automated tests | Claude Code wrote 80 tests from the acceptance criteria. The first run failed 55 of 78 because the new login message crashed when the test client logged in without the message system. It was fixed with `fail_silently`. A faster test-only password hasher cut the run from 4 minutes to 7 seconds. |
+| 2026-11-07 | Debugging | A Playwright run in Chrome found a bug the unit tests missed: on the "Change your request" page, the start date box was empty. The UK date format (11/11/2026) does not fit a browser date picker, which needs 2026-11-11, so saving failed. The widget was fixed to always send YYYY-MM-DD, and a test was added that checks the date appears. |
+| 2026-11-08 | Debugging | Django's deployment check (`check --deploy`) with `DEBUG=False` found that a new `/favicon.ico` redirect crashed the site at start-up in production, because it looked up a hashed static file name before `collectstatic` had run. It was changed to look the name up only when requested, then a full production rehearsal (collectstatic, gunicorn, HTTPS redirect, security headers, 404 page) was run. |
+| 2026-11-08 | Code quality | The browser screenshots showed docks and routers listed before laptops (types were sorted alphabetically), so the catalogue and stock list now list laptops first, with a test. flake8 found 13 long lines, which were fixed. |
+| 2026-11-08 | Testing | Every page was sent to the W3C HTML validator (23 pages, 0 errors), the CSS to the W3C CSS validator (0 errors; two old-style rules were also tidied), and every page was audited with axe for WCAG 2.1 AA (0 violations, including phone widths). |
 
 All AI output was reviewed and tested before use: see [TESTING.md](TESTING.md) for the results.
