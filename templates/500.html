@@ -1,0 +1,20 @@
+{% load static %}<!doctype html>
+<html lang="en-GB">
+<head>
+  {# Plain page: Django renders 500 errors without a request context. #}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Something went wrong | Trackroom</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <main id="main" class="workspace">
+    <section class="panel form-panel narrow error-page">
+      <p class="eyebrow">Error 500</p>
+      <h1>Something went wrong</h1>
+      <p>Sorry, the server had a problem. The error has been logged. Please try again in a moment.</p>
+      <a class="button button-primary" href="/">Go to the home page</a>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{# Previous / next links that keep the current search and filters. #}
+{% if page_obj.has_other_pages %}
+<nav class="pagination" aria-label="Pages">
+  {% if page_obj.has_previous %}
+    <a class="button button-secondary" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Previous<span class="visually-hidden"> page</span></a>
+  {% endif %}
+  <span class="pagination-status">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a class="button button-secondary" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Next<span class="visually-hidden"> page</span></a>
+  {% endif %}
+</nav>
+{% endif %}

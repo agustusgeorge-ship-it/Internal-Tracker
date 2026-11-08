@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{# Record a returned item, from HandbackCreateView. #}
+{% block title %}Record handback{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+  <p class="eyebrow">Handback</p>
+  <h1>Record a handback</h1>
+  <p class="page-subtitle"><strong>{{ item.name }}</strong> (<span class="mono">{{ item.serial_number }}</span>), held by <strong>{{ item.assigned_to.get_full_name|default:item.assigned_to.username }}</strong>.</p>
+  <form method="post" class="stacked-form" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="actions">
+      <button class="button button-primary" type="submit">Record handback</button>
+      <a class="button button-secondary" href="{{ item.get_absolute_url }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

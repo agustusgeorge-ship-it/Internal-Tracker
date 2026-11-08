@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{# Public welcome page. Logged-in users see a dashboard instead. #}
+{% block title %}Equipment for every new starter{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">IT equipment, sorted</p>
+  <h1>The right laptop on day one.<br><span>Every item back when they leave.</span></h1>
+  <p class="hero-copy">Trackroom lets new starters choose the laptop and kit they need, lets managers approve each request, and keeps track of every item's condition until it is handed back.</p>
+  <div class="actions">
+    <a class="button button-primary button-large" href="{% url 'register' %}">Create an account</a>
+    <a class="button button-secondary button-large" href="{% url 'login' %}">Log in</a>
+  </div>
+</section>
+
+<section class="steps" aria-labelledby="how-heading">
+  <h2 id="how-heading">How it works</h2>
+  <ol class="step-list">
+    <li class="panel step">
+      <span class="step-number" aria-hidden="true">1</span>
+      <h3>Choose</h3>
+      <p>New starters create an account and pick the laptop, monitor, phone and accessories they prefer from what is in stock.</p>
+    </li>
+    <li class="panel step">
+      <span class="step-number" aria-hidden="true">2</span>
+      <h3>Approve</h3>
+      <p>A manager checks each request against the person's role and approves it, or rejects it with a reason.</p>
+    </li>
+    <li class="panel step">
+      <span class="step-number" aria-hidden="true">3</span>
+      <h3>Track and return</h3>
+      <p>Every item's condition and holder is recorded. When someone leaves, the handback is logged and the item goes back into stock or for repair.</p>
+    </li>
+  </ol>
+</section>
+{% endblock %}

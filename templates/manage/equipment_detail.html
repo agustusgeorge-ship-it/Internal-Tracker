@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{# One item with its request and handback history, from StockDetailView. #}
+{% block title %}{{ item.name }}{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div class="heading-with-icon">
+    {% include "includes/type_icon.html" with type=item.equipment_type %}
+    <div>
+      <p class="eyebrow">{{ item.get_equipment_type_display }}</p>
+      <h1>{{ item.name }}</h1>
+      <p class="page-subtitle">Serial number <span class="mono">{{ item.serial_number }}</span></p>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="button button-primary" href="{% url 'manage-equipment-update' item.pk %}">Edit</a>
+    {% if item.status == "assigned" %}<a class="button button-secondary" href="{% url 'manage-handback' item.pk %}">Record handback</a>{% endif %}
+    <a class="button button-danger-outline" href="{% url 'manage-equipment-delete' item.pk %}">Delete</a>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <section class="panel detail-panel" aria-labelledby="details-heading">
+    <h2 id="details-heading">Details</h2>
+    <dl class="detail-list">
+      <div><dt>Status</dt><dd><span class="badge status-{{ item.status }}">{{ item.get_status_display }}</span></dd></div>
+      <div><dt>Condition</dt><dd><span class="badge condition-{{ item.condition }}">{{ item.get_condition_display }}</span></dd></div>
+      <div><dt>Held by</dt><dd>{% if item.assigned_to %}<a href="{% url 'manage-equipment-list' %}?holder={{ item.assigned_to.pk }}">{{ item.assigned_to.get_full_name|default:item.assigned_to.username }}</a>{% else %}Nobody{% endif %}</dd></div>
+      <div><dt>Specification</dt><dd>{{ item.specification|default:"—" }}</dd></div>
+      <div><dt>Location</dt><dd>{{ item.location|default:"—" }}</dd></div>
+      <div><dt>Notes</dt><dd>{{ item.notes|default:"—"|linebreaksbr }}</dd></div>
+      <div><dt>Last updated</dt><dd>{{ item.updated_at|date:"j M Y, H:i" }}</dd></div>
+    </dl>
+  </section>
+
+  <section class="panel detail-panel" aria-labelledby="history-heading">
+    <h2 id="history-heading">History</h2>
+    {% if history or handbacks %}
+      <ul class="timeline">
+        {% for equipment_request in history %}
+          <li>
+            <span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span>
+            Requested by <strong>{{ equipment_request.employee.username }}</strong> on {{ equipment_request.created_at|date:"j M Y" }}
+            {% if equipment_request.reviewed_by %}<small>Decided by {{ equipment_request.reviewed_by.username }} on {{ equipment_request.reviewed_at|date:"j M Y" }}</small>{% endif %}
+            {% if equipment_request.is_pending %} <a class="text-link" href="{% url 'manage-request-review' equipment_request.pk %}">Review</a>{% endif %}
+          </li>
+        {% endfor %}
+        {% for handback in handbacks %}
+          <li>
+            <span class="badge badge-neutral">Handback</span>
+            Returned by <strong>{{ handback.employee.username }}</strong> on {{ handback.returned_on|date:"j M Y" }} in {{ handback.get_condition_on_return_display|lower }} condition
+            {% if handback.notes %}<small>{{ handback.notes }}</small>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted-copy">No requests or handbacks yet.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% load static %}<!doctype html>
+<html lang="en-GB">
+<head>
+  {# Shared layout: sidebar for logged-in users, simple header for visitors. #}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Trackroom: request, approve and track company laptops and equipment for new starters and leavers.">
+  <title>{% block title %}Trackroom{% endblock %} | Trackroom</title>
+  <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  {% if user.is_authenticated %}
+  <div class="app-shell">
+    <header class="sidebar">
+      <a class="brand" href="{% url 'home' %}">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span class="brand-name">Track<span>room</span></span>
+      </a>
+      {% with url_name=request.resolver_match.url_name %}
+      <nav class="sidebar-nav" aria-label="Main">
+        <p class="sidebar-label">{% if user.is_staff %}Manager{% else %}Employee{% endif %}</p>
+        <a class="nav-link{% if url_name == 'home' %} is-active{% endif %}" href="{% url 'home' %}"{% if url_name == 'home' %} aria-current="page"{% endif %}>Dashboard</a>
+        {% if user.is_staff %}
+          <a class="nav-link{% if url_name == 'manage-request-list' or url_name == 'manage-request-review' %} is-active{% endif %}" href="{% url 'manage-request-list' %}"{% if url_name == 'manage-request-list' %} aria-current="page"{% endif %}>Requests{% if nav_pending_total %} <span class="nav-badge"><span class="visually-hidden">(</span>{{ nav_pending_total }}<span class="visually-hidden"> pending)</span></span>{% endif %}</a>
+          <a class="nav-link{% if 'manage-equipment' in url_name or url_name == 'manage-handback' %} is-active{% endif %}" href="{% url 'manage-equipment-list' %}"{% if url_name == 'manage-equipment-list' %} aria-current="page"{% endif %}>Stock</a>
+          <a class="nav-link{% if url_name == 'manage-people' %} is-active{% endif %}" href="{% url 'manage-people' %}"{% if url_name == 'manage-people' %} aria-current="page"{% endif %}>People</a>
+          <a class="nav-link{% if url_name == 'catalogue' %} is-active{% endif %}" href="{% url 'catalogue' %}"{% if url_name == 'catalogue' %} aria-current="page"{% endif %}>Catalogue</a>
+          <a class="nav-link" href="{% url 'admin:index' %}">Admin site</a>
+        {% else %}
+          <a class="nav-link{% if url_name == 'catalogue' or url_name == 'request-create' %} is-active{% endif %}" href="{% url 'catalogue' %}"{% if url_name == 'catalogue' %} aria-current="page"{% endif %}>Catalogue</a>
+          <a class="nav-link{% if url_name == 'request-list' or url_name == 'request-update' or url_name == 'request-delete' %} is-active{% endif %}" href="{% url 'request-list' %}"{% if url_name == 'request-list' %} aria-current="page"{% endif %}>My requests</a>
+          <a class="nav-link{% if url_name == 'my-equipment' %} is-active{% endif %}" href="{% url 'my-equipment' %}"{% if url_name == 'my-equipment' %} aria-current="page"{% endif %}>My equipment</a>
+        {% endif %}
+      </nav>
+      {% endwith %}
+      <div class="sidebar-footer">
+        <span class="avatar" aria-hidden="true">{{ user.username|first|upper }}</span>
+        <p class="account-name">Logged in as <strong>{{ user.username }}</strong><small>{% if user.is_staff %}Manager{% else %}Employee{% endif %}</small></p>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="button button-ghost" type="submit">Log out</button>
+        </form>
+      </div>
+    </header>
+    <div class="app-main">
+  {% else %}
+    <header class="public-header">
+      <a class="brand" href="{% url 'home' %}">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span class="brand-name">Track<span>room</span></span>
+      </a>
+      <nav class="public-nav" aria-label="Account">
+        <a class="button button-secondary" href="{% url 'login' %}">Log in</a>
+        <a class="button button-primary" href="{% url 'register' %}">Create account</a>
+      </nav>
+    </header>
+  {% endif %}
+      <main id="main" class="workspace" tabindex="-1">
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="message message-{{ message.tags }}" role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="site-footer">
+        <p>Trackroom equipment tracker &middot; Code Institute capstone project</p>
+      </footer>
+  {% if user.is_authenticated %}
+    </div>
+  </div>
+  {% endif %}
+</body>
+</html>

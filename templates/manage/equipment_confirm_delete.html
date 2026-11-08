@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{# Confirmation step for StockDeleteView. Items with history are refused. #}
+{% block title %}Delete {{ item.name }}{% endblock %}
+{% block content %}
+<section class="panel form-panel narrow">
+  <h1>Delete this item?</h1>
+  <p><strong>{{ item.name }}</strong> (<span class="mono">{{ item.serial_number }}</span>)</p>
+  {% if item.can_be_deleted %}
+    <p>This permanently removes the item from stock. This cannot be undone.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="actions">
+        <button class="button button-danger" type="submit">Yes, delete it</button>
+        <a class="button button-secondary" href="{{ item.get_absolute_url }}">No, keep it</a>
+      </div>
+    </form>
+  {% else %}
+    <p class="notice">This item has request or handback history, or is out with someone, so it cannot be deleted. To take it out of use, edit it and set its status to <strong>Retired</strong>. Its history is then kept.</p>
+    <div class="actions">
+      <a class="button button-primary" href="{% url 'manage-equipment-update' item.pk %}">Edit item</a>
+      <a class="button button-secondary" href="{{ item.get_absolute_url }}">Back to item</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

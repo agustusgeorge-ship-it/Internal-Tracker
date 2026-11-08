@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{# Manager request queue, from ManagerRequestListView. #}
+{% block title %}Requests{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">Requests</p>
+    <h1>{% if show == "decided" %}Decided requests{% else %}Requests to review{% endif %}</h1>
+    <p class="page-subtitle">{% if show == "decided" %}Requests you or another manager have approved or rejected.{% else %}Soonest start date first.{% endif %}</p>
+  </div>
+</div>
+
+<nav class="type-tabs" aria-label="Request lists">
+  <a class="type-tab{% if show == 'pending' %} is-active{% endif %}" href="{% url 'manage-request-list' %}"{% if show == 'pending' %} aria-current="true"{% endif %}>Pending</a>
+  <a class="type-tab{% if show == 'decided' %} is-active{% endif %}" href="?show=decided"{% if show == 'decided' %} aria-current="true"{% endif %}>Decided</a>
+</nav>
+
+{% if equipment_requests %}
+  <div class="panel table-wrap">
+    <table class="data-table">
+      <caption class="visually-hidden">{% if show == "decided" %}Decided requests{% else %}Pending requests{% endif %}</caption>
+      <thead>
+        <tr><th scope="col">Employee</th><th scope="col">Equipment</th><th scope="col">Needed from</th><th scope="col">Status</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+      </thead>
+      <tbody>
+        {% for equipment_request in equipment_requests %}
+          <tr>
+            <td data-label="Employee"><span class="item-copy"><strong>{{ equipment_request.employee.get_full_name|default:equipment_request.employee.username }}</strong><small>{{ equipment_request.job_title }}</small></span></td>
+            <td data-label="Equipment"><span class="item-copy"><strong>{{ equipment_request.equipment.name }}</strong><small class="mono">{{ equipment_request.equipment.serial_number }}</small></span></td>
+            <td data-label="Needed from">{{ equipment_request.start_date|date:"j M Y" }}</td>
+            <td data-label="Status"><span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span>{% if equipment_request.reviewed_by %}<small class="by-line">by {{ equipment_request.reviewed_by.username }}</small>{% endif %}</td>
+            <td class="row-actions"><a class="button {% if equipment_request.is_pending %}button-primary{% else %}button-secondary{% endif %} button-small" href="{% url 'manage-request-review' equipment_request.pk %}">{% if equipment_request.is_pending %}Review{% else %}View{% endif %}<span class="visually-hidden"> request from {{ equipment_request.employee.username }}</span></a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include "includes/pagination.html" %}
+{% else %}
+  <div class="panel empty-state">
+    <h2>{% if show == "decided" %}No decisions yet{% else %}All caught up{% endif %}</h2>
+    <p>{% if show == "decided" %}Approved and rejected requests will appear here.{% else %}There are no requests waiting for review.{% endif %}</p>
+  </div>
+{% endif %}
+{% endblock %}

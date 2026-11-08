@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{# Employees with what they hold and what they are waiting for, from PeopleView. #}
+{% block title %}People{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">People</p>
+    <h1>Joiners, staff and leavers</h1>
+    <p class="page-subtitle">See who is waiting for equipment and what each person needs to hand back when they leave.</p>
+  </div>
+</div>
+
+{% if people %}
+  <div class="panel table-wrap">
+    <table class="data-table">
+      <caption class="visually-hidden">Employees and their equipment</caption>
+      <thead>
+        <tr><th scope="col">Employee</th><th scope="col">Email</th><th scope="col">Joined Trackroom</th><th scope="col">Pending requests</th><th scope="col">Items held</th></tr>
+      </thead>
+      <tbody>
+        {% for person in people %}
+          <tr>
+            <td data-label="Employee"><span class="item-copy"><strong>{{ person.get_full_name|default:person.username }}</strong><small>{{ person.username }}</small></span></td>
+            <td data-label="Email">{{ person.email|default:"—" }}</td>
+            <td data-label="Joined Trackroom">{{ person.date_joined|date:"j M Y" }}</td>
+            <td data-label="Pending requests">{% if person.pending %}<a href="{% url 'manage-request-list' %}">{{ person.pending }}</a>{% else %}0{% endif %}</td>
+            <td data-label="Items held">{% if person.held %}<a href="{% url 'manage-equipment-list' %}?holder={{ person.pk }}">{{ person.held }}<span class="visually-hidden"> items held by {{ person.username }}</span></a>{% else %}0{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="panel empty-state">
+    <h2>No employees yet</h2>
+    <p>People appear here once they create an account.</p>
+  </div>
+{% endif %}
+{% endblock %}

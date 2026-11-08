@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{# Confirmation step for RequestDeleteView. Nothing is deleted until the form is posted. #}
+{% block title %}Cancel request{% endblock %}
+{% block content %}
+<section class="panel form-panel narrow">
+  <h1>Cancel this request?</h1>
+  <p>You are about to cancel your request for <strong>{{ equipment_request.equipment.name }}</strong> ({{ equipment_request.equipment.serial_number }}), needed from {{ equipment_request.start_date|date:"j M Y" }}.</p>
+  <p>The item will go back in stock for someone else to request.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="actions">
+      <button class="button button-danger" type="submit">Yes, cancel request</button>
+      <a class="button button-secondary" href="{% url 'request-list' %}">No, keep it</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{# Used by RequestCreateView (new request) and RequestUpdateView (change a pending one). #}
+{% block title %}{% if object %}Change request{% else %}Request equipment{% endif %}{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+  <p class="eyebrow">{% if object %}My requests{% else %}Catalogue{% endif %}</p>
+  <h1>{% if object %}Change your request{% else %}Request equipment{% endif %}</h1>
+  <p class="page-subtitle">{% if object %}You can change your choice until a manager reviews it.{% else %}A manager will check your request and approve it, usually before your start date.{% endif %}</p>
+  <form method="post" class="stacked-form" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="actions">
+      <button class="button button-primary" type="submit">{% if object %}Save changes{% else %}Send request{% endif %}</button>
+      <a class="button button-secondary" href="{% if object %}{% url 'request-list' %}{% else %}{% url 'catalogue' %}{% endif %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

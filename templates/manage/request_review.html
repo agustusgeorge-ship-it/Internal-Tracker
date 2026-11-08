@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{# One request with Approve and Reject forms, from RequestReviewView. #}
+{% block title %}Review request{% endblock %}
+{% block content %}
+{% with employee=equipment_request.employee item=equipment_request.equipment %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">Review request</p>
+    <h1>{{ employee.get_full_name|default:employee.username }} wants {{ item.name }}</h1>
+    <p class="page-subtitle">Requested {{ equipment_request.created_at|date:"j M Y" }} &middot; <span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span></p>
+  </div>
+  <a class="button button-secondary" href="{% url 'manage-request-list' %}">Back to requests</a>
+</div>
+
+<div class="dashboard-grid">
+  <section class="panel detail-panel" aria-labelledby="request-heading">
+    <h2 id="request-heading">The request</h2>
+    <dl class="detail-list">
+      <div><dt>Employee</dt><dd>{{ employee.get_full_name|default:employee.username }} ({{ employee.email|default:"no email" }})</dd></div>
+      <div><dt>Job title</dt><dd>{{ equipment_request.job_title }}</dd></div>
+      <div><dt>Needed from</dt><dd>{{ equipment_request.start_date|date:"l j F Y" }}</dd></div>
+      <div><dt>Equipment</dt><dd><a href="{{ item.get_absolute_url }}">{{ item.name }}</a> &middot; {{ item.specification|default:"standard spec" }}</dd></div>
+      <div><dt>Condition</dt><dd><span class="badge condition-{{ item.condition }}">{{ item.get_condition_display }}</span></dd></div>
+      <div><dt>Employee's note</dt><dd>{{ equipment_request.note|default:"—"|linebreaksbr }}</dd></div>
+      <div><dt>Already holds</dt><dd>{% for held in already_held %}{{ held.name }}{% if not forloop.last %}, {% endif %}{% empty %}Nothing yet{% endfor %}</dd></div>
+    </dl>
+  </section>
+
+  <section class="panel detail-panel" aria-labelledby="decision-heading">
+    <h2 id="decision-heading">Decision</h2>
+    {% if equipment_request.is_pending %}
+      <form method="post" class="stacked-form decision-form">
+        {% csrf_token %}
+        {{ approve_form }}
+        <button class="button button-success" type="submit" name="approve" value="1">Approve and assign</button>
+      </form>
+      <form method="post" class="stacked-form decision-form">
+        {% csrf_token %}
+        {{ reject_form }}
+        <button class="button button-danger" type="submit" name="reject" value="1">Reject request</button>
+      </form>
+    {% else %}
+      <p><span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span> by {{ equipment_request.reviewed_by.username|default:"a manager" }} on {{ equipment_request.reviewed_at|date:"j M Y, H:i" }}.</p>
+      {% if equipment_request.manager_note %}<p class="notice">{{ equipment_request.manager_note|linebreaksbr }}</p>{% endif %}
+    {% endif %}
+  </section>
+</div>
+{% endwith %}
+{% endblock %}

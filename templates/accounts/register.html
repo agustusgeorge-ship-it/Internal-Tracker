@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{# RegistrationForm creates an employee account; managers are set up in the admin. #}
+{% block title %}Create an account{% endblock %}
+{% block content %}
+<section class="panel form-panel narrow">
+  <h1>Create an account</h1>
+  <p class="page-subtitle">Starting with us? Create an account to choose the equipment you need for your job.</p>
+  <form method="post" class="stacked-form" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <button class="button button-primary button-large" type="submit">Create account</button>
+  </form>
+  <p class="form-footer">Already have an account? <a href="{% url 'login' %}">Log in</a>.</p>
+</section>
+{% endblock %}

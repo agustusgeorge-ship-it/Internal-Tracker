@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{# Items assigned to the logged-in employee, from MyEquipmentView. #}
+{% block title %}My equipment{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">My equipment</p>
+    <h1>Equipment I hold</h1>
+    <p class="page-subtitle">If you leave the company, these are the items to hand back to your manager.</p>
+  </div>
+</div>
+
+{% if items %}
+  <ul class="card-grid">
+    {% for item in items %}
+      <li class="panel equipment-card">
+        {% include "includes/type_icon.html" with type=item.equipment_type %}
+        <h2 class="equipment-name">{{ item.name }}</h2>
+        <p class="equipment-spec">{{ item.specification|default:"Standard specification" }}</p>
+        <p class="serial">Serial number: <span class="mono">{{ item.serial_number }}</span></p>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="panel empty-state">
+    <h2>You do not hold any equipment yet</h2>
+    <p>Items appear here once a manager approves your request.</p>
+    <a class="button button-primary" href="{% url 'request-list' %}">Check my requests</a>
+  </div>
+{% endif %}
+{% endblock %}

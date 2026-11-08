@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{# Used by StockCreateView and StockUpdateView. #}
+{% block title %}{% if item %}Edit {{ item.name }}{% else %}Add equipment{% endif %}{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+  <p class="eyebrow">Stock</p>
+  <h1>{% if item %}Edit equipment{% else %}Add equipment{% endif %}</h1>
+  <p class="page-subtitle">{% if item %}{{ item.name }} &middot; <span class="mono">{{ item.serial_number }}</span>{% else %}New items start in stock and appear in the catalogue if they are in good or fair condition.{% endif %}</p>
+  <form method="post" class="stacked-form" novalidate>
+    {% csrf_token %}
+    {{ form }}
+    <div class="actions">
+      <button class="button button-primary" type="submit">{% if item %}Save changes{% else %}Add to stock{% endif %}</button>
+      <a class="button button-secondary" href="{% if item %}{{ item.get_absolute_url }}{% else %}{% url 'manage-equipment-list' %}{% endif %}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

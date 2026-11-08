@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{# All equipment for managers, from StockListView, with search and filters. #}
+{% block title %}Stock{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">Stock</p>
+    <h1>{% if holder %}Equipment held by {{ holder.get_full_name|default:holder.username }}{% else %}All equipment{% endif %}</h1>
+    <p class="page-subtitle">Search, filter, edit and record handbacks.</p>
+  </div>
+  <a class="button button-primary" href="{% url 'manage-equipment-create' %}">Add equipment</a>
+</div>
+
+<form class="panel filter-bar" method="get" action="{% url 'manage-equipment-list' %}" role="search">
+  {% if holder %}<input type="hidden" name="holder" value="{{ holder.pk }}">{% endif %}
+  <div class="filter-field filter-search">
+    <label for="stock-search">Search</label>
+    <input id="stock-search" class="search-input" type="search" name="q" value="{{ query }}" maxlength="100" placeholder="Name, serial number or location">
+  </div>
+  {% for param, label, choices in filters %}
+    <div class="filter-field">
+      <label for="filter-{{ param }}">{{ label }}</label>
+      <select id="filter-{{ param }}" name="{{ param }}">
+        <option value="">Any</option>
+        {% for value, text in choices %}
+          <option value="{{ value }}"{% for key, current in active.items %}{% if key == param and current == value %} selected{% endif %}{% endfor %}>{{ text }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endfor %}
+  <div class="filter-actions">
+    <button class="button button-secondary" type="submit">Apply</button>
+    {% if query or active or holder %}<a class="text-link" href="{% url 'manage-equipment-list' %}">Clear all</a>{% endif %}
+  </div>
+</form>
+
+<p class="result-count" role="status">{{ paginator.count }} item{{ paginator.count|pluralize }}</p>
+
+{% if items %}
+  <div class="panel table-wrap">
+    <table class="data-table">
+      <caption class="visually-hidden">Equipment in stock and assigned</caption>
+      <thead>
+        <tr><th scope="col">Equipment</th><th scope="col">Serial number</th><th scope="col">Condition</th><th scope="col">Status</th><th scope="col">Held by</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td data-label="Equipment"><a class="item-cell" href="{{ item.get_absolute_url }}">{% include "includes/type_icon.html" with type=item.equipment_type %}<span class="item-copy"><strong>{{ item.name }}</strong><small>{{ item.get_equipment_type_display }}{% if item.location %} &middot; {{ item.location }}{% endif %}</small></span></a></td>
+            <td data-label="Serial number"><span class="mono">{{ item.serial_number }}</span></td>
+            <td data-label="Condition"><span class="badge condition-{{ item.condition }}">{{ item.get_condition_display }}</span></td>
+            <td data-label="Status"><span class="badge status-{{ item.status }}">{{ item.get_status_display }}</span></td>
+            <td data-label="Held by">{% if item.assigned_to %}<a href="{% url 'manage-equipment-list' %}?holder={{ item.assigned_to.pk }}">{{ item.assigned_to.username }}</a>{% else %}—{% endif %}</td>
+            <td class="row-actions">
+              <a class="button button-secondary button-small" href="{% url 'manage-equipment-update' item.pk %}">Edit<span class="visually-hidden"> {{ item.name }}</span></a>
+              {% if item.status == "assigned" %}<a class="button button-secondary button-small" href="{% url 'manage-handback' item.pk %}">Handback<span class="visually-hidden"> of {{ item.name }}</span></a>{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include "includes/pagination.html" %}
+{% else %}
+  <div class="panel empty-state">
+    <h2>No equipment found</h2>
+    <p>{% if query or active or holder %}Nothing matches these filters. <a href="{% url 'manage-equipment-list' %}">Show all equipment</a>.{% else %}Add the first item to start tracking stock.{% endif %}</p>
+  </div>
+{% endif %}
+{% endblock %}

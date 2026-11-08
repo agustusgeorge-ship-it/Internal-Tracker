@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{# The logged-in employee's own requests, from RequestListView. #}
+{% block title %}My requests{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">My requests</p>
+    <h1>My equipment requests</h1>
+    <p class="page-subtitle">You can change or cancel a request while it is pending.</p>
+  </div>
+  <a class="button button-primary" href="{% url 'catalogue' %}">Request more equipment</a>
+</div>
+
+{% if equipment_requests %}
+  <div class="panel table-wrap">
+    <table class="data-table">
+      <caption class="visually-hidden">My equipment requests</caption>
+      <thead>
+        <tr><th scope="col">Equipment</th><th scope="col">Needed from</th><th scope="col">Requested</th><th scope="col">Status</th><th scope="col">Manager's note</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr>
+      </thead>
+      <tbody>
+        {% for equipment_request in equipment_requests %}
+          <tr>
+            <td data-label="Equipment"><span class="item-cell">{% include "includes/type_icon.html" with type=equipment_request.equipment.equipment_type %}<span class="item-copy"><strong>{{ equipment_request.equipment.name }}</strong><small>{{ equipment_request.equipment.get_equipment_type_display }}</small></span></span></td>
+            <td data-label="Needed from">{{ equipment_request.start_date|date:"j M Y" }}</td>
+            <td data-label="Requested">{{ equipment_request.created_at|date:"j M Y" }}</td>
+            <td data-label="Status"><span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span></td>
+            <td data-label="Manager's note">{{ equipment_request.manager_note|default:"—" }}</td>
+            <td class="row-actions">
+              {% if equipment_request.is_pending %}
+                <a class="button button-secondary button-small" href="{% url 'request-update' equipment_request.pk %}">Edit<span class="visually-hidden"> request for {{ equipment_request.equipment.name }}</span></a>
+                <a class="button button-danger-outline button-small" href="{% url 'request-delete' equipment_request.pk %}">Cancel<span class="visually-hidden"> request for {{ equipment_request.equipment.name }}</span></a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% include "includes/pagination.html" %}
+{% else %}
+  <div class="panel empty-state">
+    <h2>You have not requested anything yet</h2>
+    <p>Browse the catalogue to choose your laptop and other equipment.</p>
+    <a class="button button-primary" href="{% url 'catalogue' %}">Browse equipment</a>
+  </div>
+{% endif %}
+{% endblock %}

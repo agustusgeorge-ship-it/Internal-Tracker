@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{# Shown when a page or record does not exist, or belongs to someone else. #}
+{% block title %}Page not found{% endblock %}
+{% block content %}
+<section class="panel form-panel narrow error-page">
+  <p class="eyebrow">Error 404</p>
+  <h1>Page not found</h1>
+  <p>This page does not exist, or you do not have access to it.</p>
+  <a class="button button-primary" href="{% url 'home' %}">Go to the dashboard</a>
+</section>
+{% endblock %}

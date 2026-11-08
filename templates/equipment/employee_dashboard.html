@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{# Employee dashboard: totals and latest requests, from equipment.views.home. #}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">Employee dashboard</p>
+    <h1>Hello, {{ user.first_name|default:user.username }}</h1>
+    <p class="page-subtitle">Choose your equipment, follow your requests and see what you hold.</p>
+  </div>
+  <a class="button button-primary" href="{% url 'catalogue' %}">Browse equipment</a>
+</div>
+
+<div class="stat-grid">
+  <a class="stat-card" href="{% url 'request-list' %}">
+    <span class="stat-label">Pending requests</span>
+    <strong class="stat-value">{{ pending_total }}</strong>
+    <span class="stat-caption">Waiting for a manager</span>
+  </a>
+  <a class="stat-card" href="{% url 'my-equipment' %}">
+    <span class="stat-label">Equipment I hold</span>
+    <strong class="stat-value">{{ held_total }}</strong>
+    <span class="stat-caption">Assigned to you</span>
+  </a>
+  <a class="stat-card" href="{% url 'catalogue' %}">
+    <span class="stat-label">Available to request</span>
+    <strong class="stat-value">{{ available_total }}</strong>
+    <span class="stat-caption">In stock now</span>
+  </a>
+</div>
+
+<section class="panel" aria-labelledby="recent-heading">
+  <div class="panel-heading">
+    <h2 id="recent-heading">My latest requests</h2>
+    <a class="text-link" href="{% url 'request-list' %}">View all requests</a>
+  </div>
+  {% if recent_requests %}
+    <ul class="item-list">
+      {% for equipment_request in recent_requests %}
+        <li class="item-row">
+          {% include "includes/type_icon.html" with type=equipment_request.equipment.equipment_type %}
+          <span class="item-copy"><strong>{{ equipment_request.equipment.name }}</strong><small>Needed from {{ equipment_request.start_date|date:"j M Y" }}</small></span>
+          <span class="badge request-{{ equipment_request.status }}">{{ equipment_request.get_status_display }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty-state">
+      <h3>No requests yet</h3>
+      <p>Start by choosing a laptop from the catalogue.</p>
+      <a class="button button-primary" href="{% url 'catalogue' %}?type=laptop">Choose a laptop</a>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
