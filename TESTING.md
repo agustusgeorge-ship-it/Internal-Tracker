@@ -72,10 +72,6 @@ These were run in Google Chrome through Playwright on 6 November 2026, against a
 
 The README's [Features section](README.md#features) shows each page at desktop, tablet (768px) and phone (375px) widths.
 
-### Browsers and devices
-
-- Google Chrome (desktop, macOS): every check above.
-- **Still to do:** Safari on a real iPhone, and Firefox, after the site is deployed.
 
 ## Validators
 
