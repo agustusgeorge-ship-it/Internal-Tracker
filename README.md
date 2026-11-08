@@ -230,7 +230,6 @@ stateDiagram-v2
 The project was planned and tracked on a public GitHub Projects board: **https://github.com/users/agustusgeorge-ship-it/projects/7/views/1**.
 
 - Each user story is a GitHub issue created from the repository's **User Story Template** (`.github/ISSUE_TEMPLATE/user-story-template.md`), with acceptance criteria and tasks.
-- Each issue has a MoSCoW label: `must-have`, `should-have` or `could-have`.
 - The board has the columns **To do**, **In progress** and **Done**.
 - The Must stories were built first, in this order: accounts and roles, stock, requests, approvals, then handbacks. Should and Could stories followed. See the build order in [docs/USER_STORIES.md](docs/USER_STORIES.md).
 
