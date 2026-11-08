@@ -8,6 +8,15 @@ It was built for the Code Institute Full Stack bootcamp capstone, to show full C
 
 **Live site: [https://internal-tracker-agustus-7f7416195a35.herokuapp.com/](https://internal-tracker-agustus-7f7416195a35.herokuapp.com/)**
 
+### Demo logins (test data only)
+
+| Role | Username | Password |
+|---|---|---|
+| Manager | `demo_manager` | `demo_man` |
+| Employee | `demo_employee` | `demo_emp` |
+
+These accounts exist only on the demo site and hold no real data.
+
 ![Trackroom manager dashboard](docs/images/12-manager-dashboard.png)
 
 ## UX design
