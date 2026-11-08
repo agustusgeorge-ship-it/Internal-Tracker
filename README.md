@@ -220,8 +220,7 @@ stateDiagram-v2
 
 **Lighthouse (live site, accessibility):**
 
-![Lighthouse accessibility score for the live site](Internal-Tracker\docs\images\22-lighthouse test.png)
-
+![Lighthouse accessibility score for the live site](Internal-Tracker\docs\images\22-lighthouse-test.png)
 ### Future features
 
 - Email the employee when a request is decided (EST-19).
