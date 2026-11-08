@@ -218,7 +218,7 @@ stateDiagram-v2
 
 ## Agile methodology
 
-The project was planned and tracked on a public GitHub Projects board: **[add the project board link here](https://github.com/users/agustusgeorge-ship-it/projects/)**.
+The project was planned and tracked on a public GitHub Projects board: **https://github.com/users/agustusgeorge-ship-it/projects/7/views/1**.
 
 - Each user story is a GitHub issue created from the repository's **User Story Template** (`.github/ISSUE_TEMPLATE/user-story-template.md`), with acceptance criteria and tasks.
 - Each issue has a MoSCoW label: `must-have`, `should-have` or `could-have`.
